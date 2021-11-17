@@ -167,7 +167,11 @@
                         $('#exampleModal').modal('hide');
                         tampil_table_users();
                     }
-                }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" +
+                    thrownError);
+            }
             });
         }
 
