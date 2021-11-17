@@ -25,18 +25,42 @@ class Home extends BaseController
     {
         $user_model = $this->user_model;
         if ($this->request->isAJAX()) {
-            $data = [
-                'nama_user' => $this->request->getVar('nama_user'),
-                'alamat'    => $this->request->getVar('alamat')
-            ];
 
-            $simpan = $user_model->tambah($data);
-            if ($simpan) {
-                $this->output['sukses'] = true;
-                $this->output['pesan']  = 'Data ditemukan';
+            $validation = \Config\Services::validation();
+
+            $valid = $this->validate([
+                'nama_user' => [
+                    'label' => 'Nama User',
+                    'rules' => 'required|is_unique[users.nama_user]',
+                    'errors' => [
+                        'required' => '{field} tidak boleh kosong',
+                        'is_unique' => '{field} tidak boleh ada yang sama, silahkan coba yang lain'
+                    ]
+                ]
+              
+            ]);
+
+            if (!$valid) {
+                $msg = [
+                    'error' => [
+                        'namauser' => $validation->getError('nama_user'),
+                    ]
+                ];
+            } else {
+                $data = [
+                    'nama_user' => $this->request->getVar('nama_user'),
+                    'alamat'    => $this->request->getVar('alamat')
+                ];
+
+                // $this->user->insert($data);
+                $user_model->tambah($data);
+                $msg = [
+                    'sukses' => 'Data user berhasil tersimpan'
+                ];
             }
-
-            echo json_encode($this->output);
+            echo json_encode($msg);
+        }else {
+            exit('Maaf tidak dapat diproses');
         }
     }
 
@@ -106,8 +130,7 @@ class Home extends BaseController
             $tomboledit = "<button type=\"button\" class=\"btn btn-info btn-sm\" onclick=\"edit('" . $lists->id_user . "')\"><i class=\"fa fa-tags\"></i></button>";
 
             $tombolhapus = "<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"hapus('" . $lists->id_user . "')\">
-            <i class=\"fa fa-trash\"></i>
-        </button>";
+            <i class=\"fa fa-trash\"></i></button>";
         
             $row    = array();
             $row[]  = $no;
