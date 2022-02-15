@@ -96,6 +96,7 @@
             status = 'tambah';
             $('#exampleModal').modal('show');
             $('#form-users')[0].reset();
+            $('#nama_user').removeClass('is-valid').removeClass('is-invalid');
         }
 
         function edit(id_user) {
