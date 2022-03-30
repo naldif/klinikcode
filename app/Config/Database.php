@@ -36,7 +36,7 @@ class Database extends Config
         'username' => 'root',
         'password' => '',
         'database' => 'klinikcode',
-        'DBDriver' => 'PgSql',
+        'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
         'DBDebug'  => (ENVIRONMENT !== 'production'),
